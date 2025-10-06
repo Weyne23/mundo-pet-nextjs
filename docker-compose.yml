@@ -3,9 +3,9 @@ services: #Quais serviços vao rodar(Pode ter mais de 1)
   postgres:
     image: postgres:17 #Qual serviço vai rodar
     container_name: petshop-db #Nome do container
-    restart: always #Toda vez que acontecer uma queda do serviço ele vai tentar reiniciar 
+    restart: always #Toda vez que acontecer uma queda do serviço ele vai tentar reiniciar
     ports:
-      - '5432:5432'  #Porta onde vai rodar meu container (Porta da minha maquina:porta do container)
+      - '5432:5432' #Porta onde vai rodar meu container (Porta da minha maquina:porta do container)
     environment: #Variaveis para configurar o postgress
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
@@ -14,4 +14,4 @@ services: #Quais serviços vao rodar(Pode ter mais de 1)
       - ./pgdata:/var/lib/postgresql/data #Especie de gaveta para salvar os dados para nao perder ao resetar o container
 
 volumes:
-  pgdata: #Declaração final do meu volume 
+  pgdata: #Declaração final do meu volume

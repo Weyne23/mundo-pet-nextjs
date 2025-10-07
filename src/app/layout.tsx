@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import '../styles/globals.css';
 
 const inter = Inter({
@@ -17,7 +17,7 @@ const interTight = Inter({
 export const metadata: Metadata = {
   title: 'Mundo Pet',
   description:
-    'Aqui é onde seu Pet vai ser tratado como o principe/preincessa que ele é!',
+    'Aqui é onde seu Pet vai ser tratado como o príncipe/princesa que ele é!',
 };
 
 export default function RootLayout({

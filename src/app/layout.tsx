@@ -5,18 +5,19 @@ import '../styles/globals.css';
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
-  weight: ['400', '500', '700']
+  weight: ['400', '500', '700'],
 });
 
 const interTight = Inter({
   variable: '--font-inter-tight',
   subsets: ['latin'],
-  weight: ['700']
+  weight: ['700'],
 });
 
 export const metadata: Metadata = {
   title: 'Mundo Pet',
-  description: 'Aqui é onde seu Pet vai ser tratado como o principe/preincessa que ele é!',
+  description:
+    'Aqui é onde seu Pet vai ser tratado como o principe/preincessa que ele é!',
 };
 
 export default function RootLayout({
@@ -26,9 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${interTight.variable} antialiased`}
-      >
+      <body className={`${inter.variable} ${interTight.variable} antialiased`}>
         {children}
       </body>
     </html>

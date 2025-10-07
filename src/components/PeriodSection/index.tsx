@@ -1,1 +1,1 @@
-export * from './period-section'
+export * from './period-section';

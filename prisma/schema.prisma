@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js" //Dizendo que quero usar Prisma no ambiente JS/TS
+  output   = "../src/generated/prisma" //caminho onde vai ser salvo os dados
+}
+
+datasource db {
+  provider = "postgresql" //Qual banco de dados estou utilizando
+  url      = env("DATABASE_URL") //Pegando a conection string das variaveis de ambiente
+}
+
+model Appointment {
+  id String @id @default(cuid())
+  tutorName String
+  petName String
+  phone String
+  description String
+  scheduleAt DateTime
+
+  @@map("appointment") //Aqui dizendo que o nome da minha tabela vai ser em minusculo ignorando o nome que eu declarei o model
+}

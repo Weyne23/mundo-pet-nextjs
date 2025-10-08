@@ -1,3 +1,4 @@
+import { AppointmentForm } from '@/components/AppointmentForm';
 import { PeriodSection } from '@/components/PeriodSection';
 //import { prisma } from '@/lib/prisma';
 import {
@@ -25,6 +26,10 @@ export default async function Home() {
         {periods.map((per, index) => (
           <PeriodSection key={index} period={per} />
         ))}
+      </div>
+
+      <div>
+        <AppointmentForm />
       </div>
     </div>
   );

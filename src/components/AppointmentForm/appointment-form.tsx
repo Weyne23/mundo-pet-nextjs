@@ -20,28 +20,66 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { CalendarIcon, ChevronDownIcon, Dog, Phone, User } from 'lucide-react';
+import {
+  CalendarIcon,
+  ChevronDownIcon,
+  Clock,
+  Dog,
+  Phone,
+  User,
+} from 'lucide-react';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { IMaskInput } from 'react-imask';
-import { format, startOfDay, startOfToday } from 'date-fns';
+import {
+  format,
+  setHours,
+  setMinutes,
+  startOfDay,
+  startOfToday,
+} from 'date-fns';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
-const appointmentsFormSchema = z.object({
-  tutorName: z.string().min(3, 'O nome do tutor é obrigatorio e maior que 3!'),
-  petName: z.string().min(3, 'O nome do pet é Obrigatorio e maior que 3!'),
-  phone: z.string().min(11, 'O telefone é obrigatorio'),
-  description: z.string().min(3, 'A descrição é obrigatorio'),
-  scheduleAt: z
-    .date({
-      error: 'A data é obrigatória',
-    })
-    .min(startOfToday(), {
-      message: 'A data não pode ser no passado',
-    }),
-});
+const appointmentsFormSchema = z
+  .object({
+    tutorName: z
+      .string()
+      .min(3, 'O nome do tutor é obrigatorio e maior que 3!'),
+    petName: z.string().min(3, 'O nome do pet é Obrigatorio e maior que 3!'),
+    phone: z.string().min(11, 'O telefone é obrigatorio'),
+    description: z.string().min(3, 'A descrição é obrigatorio'),
+    scheduleAt: z
+      .date({
+        error: 'A data é obrigatória',
+      })
+      .min(startOfToday(), {
+        message: 'A data não pode ser no passado',
+      }),
+    time: z.string().min(1, 'A hora é obrigatória'),
+  })
+  .refine(
+    (data) => {
+      const [hour, minute] = data.time.split(':');
+      const scheduleDateTime = setMinutes(
+        setHours(data.scheduleAt, Number(hour)),
+        Number(minute)
+      );
+      return scheduleDateTime > new Date();
+    },
+    {
+      path: ['time'],
+      error: 'O horario não pode ser no passado!',
+    }
+  );
 
 type AppointmentFormValues = z.infer<typeof appointmentsFormSchema>;
 
@@ -219,6 +257,38 @@ export const AppointmentForm = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="time"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-label-medium-size text-content-primary">
+                      Hora
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-content-brand" />
+                            <SelectValue placeholder="--:-- --" />
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {TIME_OPTIONS.map((time) => (
+                            <SelectItem key={time} value={time}>
+                              {time}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit">Salvar</Button>
             </form>
           </Form>
@@ -227,3 +297,20 @@ export const AppointmentForm = () => {
     </Dialog>
   );
 };
+
+const generateTimeOptions = (): string[] => {
+  const times = [];
+
+  for (let hour = 9; hour <= 21; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      if (hour === 21 && minute > 0) break;
+
+      const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+      times.push(timeString);
+    }
+  }
+
+  return times;
+};
+
+const TIME_OPTIONS = generateTimeOptions();

@@ -50,6 +50,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { toast } from 'sonner';
+import { createAppointment } from '@/app/actions';
 
 const appointmentsFormSchema = z
   .object({
@@ -98,13 +99,18 @@ export const AppointmentForm = () => {
     },
   });
 
-  const onSubmit = (data: AppointmentFormValues) => {
+  const onSubmit = async (data: AppointmentFormValues) => {
     const [hour, minute] = data.time.split(':');
 
     const scheduleAt = new Date(data.scheduleAt);
     scheduleAt.setHours(Number(hour), Number(minute), 0, 0);
 
     toast.success(`Agendamento criado com sucesso!`);
+
+    await createAppointment({
+      ...data,
+      scheduleAt
+    })
   };
 
   return (

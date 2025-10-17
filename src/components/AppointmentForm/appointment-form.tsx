@@ -51,6 +51,8 @@ import {
 } from '../ui/select';
 import { toast } from 'sonner';
 import { createAppointment } from '@/app/actions';
+import { useEffect, useState } from 'react';
+import { Appointment } from '@/types/appointment';
 
 const appointmentsFormSchema = z
   .object({
@@ -86,7 +88,16 @@ const appointmentsFormSchema = z
 
 type AppointmentFormValues = z.infer<typeof appointmentsFormSchema>;
 
-export const AppointmentForm = () => {
+type AppointmentFormProps = {
+  appointment?: Appointment;
+  children?: React.ReactNode;
+};
+
+export const AppointmentForm = ({
+  appointment,
+  children,
+}: AppointmentFormProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const form = useForm<AppointmentFormValues>({
     resolver: zodResolver(appointmentsFormSchema),
     defaultValues: {
@@ -99,25 +110,35 @@ export const AppointmentForm = () => {
     },
   });
 
+  useEffect(() => {
+    form.reset(appointment); //Aqui eu carrego os dados de appointment nos campos do form
+  }, [appointment, form]);
+
   const onSubmit = async (data: AppointmentFormValues) => {
     const [hour, minute] = data.time.split(':');
 
     const scheduleAt = new Date(data.scheduleAt);
     scheduleAt.setHours(Number(hour), Number(minute), 0, 0);
 
-    toast.success(`Agendamento criado com sucesso!`);
-
-    await createAppointment({
+    const result = await createAppointment({
       ...data,
-      scheduleAt
-    })
+      scheduleAt,
+    });
+
+    if (result?.error) {
+      toast.error(result.error);
+      return;
+    }
+
+    toast.success(`Agendamento criado com sucesso!`);
+    setIsOpen(false);
+    form.reset(); //Reseta oo dados do formulario
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="brand">Novo Agendamento</Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
+
       <DialogContent
         variant="appointment"
         overlayVariant="blurred"

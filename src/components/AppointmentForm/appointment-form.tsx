@@ -50,7 +50,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { toast } from 'sonner';
-import { createAppointment } from '@/app/actions';
+import { createAppointment, updateAppointment } from '@/app/actions';
 import { useEffect, useState } from 'react';
 import { Appointment } from '@/types/appointment';
 
@@ -58,10 +58,10 @@ const appointmentsFormSchema = z
   .object({
     tutorName: z
       .string()
-      .min(3, 'O nome do tutor é obrigatorio e maior que 3!'),
-    petName: z.string().min(3, 'O nome do pet é Obrigatorio e maior que 3!'),
-    phone: z.string().min(11, 'O telefone é obrigatorio'),
-    description: z.string().min(3, 'A descrição é obrigatorio'),
+      .min(3, 'O nome do tutor é obrigatório e maior que 3!'),
+    petName: z.string().min(3, 'O nome do pet é obrigatório e maior que 3!'),
+    phone: z.string().min(11, 'O telefone é obrigatório'),
+    description: z.string().min(3, 'A descrição é obrigatório'),
     scheduleAt: z
       .date({
         error: 'A data é obrigatória',
@@ -120,7 +120,13 @@ export const AppointmentForm = ({
     const scheduleAt = new Date(data.scheduleAt);
     scheduleAt.setHours(Number(hour), Number(minute), 0, 0);
 
-    const result = await createAppointment({
+    const isEdit = !!appointment?.id;
+
+    const result = isEdit ? await updateAppointment(appointment?.id, {
+      ...data,
+      scheduleAt,
+    }) :
+     await createAppointment({
       ...data,
       scheduleAt,
     });
@@ -130,9 +136,9 @@ export const AppointmentForm = ({
       return;
     }
 
-    toast.success(`Agendamento criado com sucesso!`);
+    toast.success(`Agendamento ${isEdit ? 'atualizado' : 'criado'} criado com sucesso!`);
     setIsOpen(false);
-    form.reset(); //Reseta oo dados do formulario
+    form.reset(); //Reseta o dados do formulário
   };
 
   return (

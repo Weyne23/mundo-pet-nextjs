@@ -32,13 +32,7 @@ import {
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { IMaskInput } from 'react-imask';
-import {
-  format,
-  setHours,
-  setMinutes,
-  startOfDay,
-  startOfToday,
-} from 'date-fns';
+import { format, setHours, setMinutes, startOfToday } from 'date-fns';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
@@ -122,21 +116,24 @@ export const AppointmentForm = ({
 
     const isEdit = !!appointment?.id;
 
-    const result = isEdit ? await updateAppointment(appointment?.id, {
-      ...data,
-      scheduleAt,
-    }) :
-     await createAppointment({
-      ...data,
-      scheduleAt,
-    });
+    const result = isEdit
+      ? await updateAppointment(appointment?.id, {
+          ...data,
+          scheduleAt,
+        })
+      : await createAppointment({
+          ...data,
+          scheduleAt,
+        });
 
     if (result?.error) {
       toast.error(result.error);
       return;
     }
 
-    toast.success(`Agendamento ${isEdit ? 'atualizado' : 'criado'} criado com sucesso!`);
+    toast.success(
+      `Agendamento ${isEdit ? 'atualizado' : 'criado'} criado com sucesso!`
+    );
     setIsOpen(false);
     form.reset(); //Reseta o dados do formulário
   };

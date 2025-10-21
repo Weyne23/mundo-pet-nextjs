@@ -31,8 +31,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${interTight.variable} antialiased`}>
         <Header />
-        <div className='max-w-2xl mx-auto'>
-          <main className='flex flex-1 flex-col mt-12'>
+        <div className="max-w-3xl mx-auto">
+          <main className="flex flex-1 flex-col mt-12">
             {children}
             <Toaster position="top-right" />
           </main>

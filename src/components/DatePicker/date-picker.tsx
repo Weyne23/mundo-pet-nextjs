@@ -1,6 +1,11 @@
 'use client';
 
-import { Calendar as IconCalendar, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Calendar as IconCalendar,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { Button } from '../ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
@@ -41,7 +46,7 @@ export const DatePicker = () => {
   const handleDateSelect = (selectedDate: Date | undefined) => {
     updateURLWithDate(selectedDate);
     setIsPopoverOpen(false);
-  }
+  };
 
   useEffect(() => {
     const newDate = getInitialDate();
@@ -58,7 +63,10 @@ export const DatePicker = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <NavigationButton tooltipText='Dia anterior' onClick={() => handleNavigateDay(-1)}>
+      <NavigationButton
+        tooltipText="Dia anterior"
+        onClick={() => handleNavigateDay(-1)}
+      >
         <ChevronLeft className="h-4 w-4 " />
       </NavigationButton>
 
@@ -79,9 +87,9 @@ export const DatePicker = () => {
             <ChevronDown className="h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className='w-auto p-0'>
+        <PopoverContent className="w-auto p-0">
           <Calendar
-            mode='single'
+            mode="single"
             selected={date}
             onSelect={handleDateSelect}
             autoFocus
@@ -90,7 +98,10 @@ export const DatePicker = () => {
         </PopoverContent>
       </Popover>
 
-      <NavigationButton tooltipText='Próximo dia' onClick={() => handleNavigateDay(1)}>
+      <NavigationButton
+        tooltipText="Próximo dia"
+        onClick={() => handleNavigateDay(1)}
+      >
         <ChevronRight className="h-4 w-4" />
       </NavigationButton>
     </div>

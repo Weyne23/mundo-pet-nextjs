@@ -250,7 +250,7 @@ export const AppointmentForm = ({
                   </FormItem>
                 )}
               />
-              <div className="space-y-4 md:grid md:grid-cols-2 md:gap-4">
+              <div className="md:grid md:grid-cols-2 md:gap-4">
                 <FormField
                   control={form.control}
                   name="scheduleAt"
@@ -261,15 +261,15 @@ export const AppointmentForm = ({
                       </FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
-                          <FormControl>
+                          <FormControl className="justify-center">
                             <Button
                               variant="outline"
                               className={cn(
-                                'w-full justify-between text-left font-normal bg-background-tertiary border-border-primary text-content-primary hover:bg-background-tertiary hover:border-border-secondary hover:text-content-primary focus-visible:ring-offset-focus-visible:ring-1 focus-visible:ring-border-brand focus:border-border-brand focus-visible:border-border-brand',
+                                'w-full justify-between text-left font-normal bg-background-tertiary border-border-primary text-content-primary hover:bg-background-tertiary hover:border-border-secondary hover:text-content-primary focus-visible:ring-offset-0 focus-visible:ring-1 focus-visible:ring-border-brand focus:border-border-brand focus-visible:border-border-brand',
                                 !field.value && 'text-content-secondary'
                               )}
                             >
-                              <div className="flex items-center gap-8">
+                              <div className="flex items-center gap-2">
                                 <CalendarIcon
                                   className="text-content-brand"
                                   size={20}
